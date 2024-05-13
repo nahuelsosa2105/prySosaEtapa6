@@ -17,9 +17,6 @@ namespace prySosaEtapa6
             InitializeComponent();
         }
 
-        clsVehiculo objAuto = new clsVehiculo();
-        clsVehiculo objAvion = new clsVehiculo();
-        clsVehiculo objBarco = new clsVehiculo();
 
         List<clsVehiculo> listaVehiculos = new List<clsVehiculo>();
 
@@ -36,27 +33,23 @@ namespace prySosaEtapa6
             {
                 clsVehiculo nuevoVehiculo = new clsVehiculo();
 
-                // Crear un auto en cada iteración del bucle
                 nuevoVehiculo.CrearAuto();
 
-                int posicionX, posicionY;
+                int posicionX;
+                int posicionY;
                 bool superpuesto;
 
                 do
                 {
-                    // Generar una posición aleatoria dentro del formulario para el eje X
                     posicionX = random.Next(0, this.ClientSize.Width - nuevoVehiculo.pctAuto.Width);
 
-                    // Generar una posición aleatoria dentro del formulario para el eje Y
                     posicionY = random.Next(0, this.ClientSize.Height - nuevoVehiculo.pctAuto.Height);
 
                     superpuesto = false;
 
-                    // Verificar si la nueva posición se superpone con las posiciones de los vehículos existentes
                     foreach (clsVehiculo vehiculoExistente in listaVehiculos)
                     {
-                        if (Math.Abs(posicionX - vehiculoExistente.pctAuto.Location.X) < nuevoVehiculo.pctAuto.Width &&
-                            Math.Abs(posicionY - vehiculoExistente.pctAuto.Location.Y) < nuevoVehiculo.pctAuto.Height)
+                        if (Math.Abs(posicionX - vehiculoExistente.pctAuto.Location.X) < nuevoVehiculo.pctAuto.Width && Math.Abs(posicionY - vehiculoExistente.pctAuto.Location.Y) < nuevoVehiculo.pctAuto.Height)
                         {
                             superpuesto = true;
                             break;
@@ -65,11 +58,9 @@ namespace prySosaEtapa6
                 }
                 while (superpuesto);
 
-                // Asignar la posición al vehículo y agregarlo a la lista de vehículos
                 nuevoVehiculo.pctAuto.Location = new Point(posicionX, posicionY);
                 listaVehiculos.Add(nuevoVehiculo);
 
-                // Mostrar el vehículo en el formulario
                 Controls.Add(nuevoVehiculo.pctAuto);
             }
         }
@@ -85,15 +76,12 @@ namespace prySosaEtapa6
 
             foreach (clsVehiculo vehiculo in listaVehiculos.ToList())
             {
-                // Genera un desplazamiento aleatorio en ambas direcciones
                 int desplazamientoX = random.Next(-40, 41); 
                 int desplazamientoY = random.Next(-40, 41); 
 
-                // Actualiza la posición del vehículo
                 int nuevaPosX = vehiculo.pctAuto.Location.X + desplazamientoX;
                 int nuevaPosY = vehiculo.pctAuto.Location.Y + desplazamientoY;
 
-                // Verifica si el vehículo está dentro de los límites del formulario
                 if (nuevaPosX < 0)
                     nuevaPosX = 0;
                 else if (nuevaPosX > this.ClientSize.Width - vehiculo.pctAuto.Width)
@@ -106,19 +94,18 @@ namespace prySosaEtapa6
 
                 vehiculo.pctAuto.Location = new Point(nuevaPosX, nuevaPosY);
 
-                // Verifica las colisiones con otros vehículos
                 foreach (clsVehiculo otroVehiculo in listaVehiculos.ToList())
                 {
                     if (otroVehiculo != vehiculo && vehiculo.pctAuto.Bounds.IntersectsWith(otroVehiculo.pctAuto.Bounds))
                     {
-                        // Elimina los vehículos involucrados de la lista y del formulario
                         listaVehiculos.Remove(vehiculo);
                         listaVehiculos.Remove(otroVehiculo);
                         Controls.Remove(vehiculo.pctAuto);
                         Controls.Remove(otroVehiculo.pctAuto);
-                        break; // Sal del bucle interior después de eliminar los vehículos
+                        break;
                     }
                 }
+                
             }
         }
     }
